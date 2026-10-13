@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لوحة مدرسة القرآن الكريم</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f4f7f5;--card:#fff;--tx:#14231e;--mu:#5f7169;--pr:#0f6b57;--pr2:#0b4f41;--ac:#c9a227;--bd:#dde7e2;--dn:#c0392b;--soft:#e6f2ee}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1714;--card:#16231f;--tx:#e8f1ed;--mu:#95a8a0;--pr:#2bb394;--pr2:#1e8a72;--bd:#273a34;--soft:#1c3029}}
+:root[data-theme="dark"]{--bg:#0e1714;--card:#16231f;--tx:#e8f1ed;--mu:#95a8a0;--pr:#2bb394;--pr2:#1e8a72;--bd:#273a34;--soft:#1c3029}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Tajawal',Tahoma,Arial,sans-serif;line-height:1.7}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1100px;margin:auto;padding:16px}
+header{background:linear-gradient(135deg,var(--pr2),var(--pr));color:#fff;padding:14px 16px}
+header .in{max-width:1100px;margin:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:26px}.ttl{font-weight:800;font-size:18px;flex:1}.ttl small{display:block;font-weight:400;opacity:.85;font-size:13px}
+.btn{border:0;border-radius:10px;padding:8px 16px;cursor:pointer;background:var(--pr);color:#fff;font-weight:700}
+.btn.gh{background:rgba(255,255,255,.18)}.btn.sm{padding:3px 11px;font-size:13px}.btn.dn{background:var(--dn)}.btn.ou{background:var(--soft);color:var(--pr)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-bottom:16px;align-items:start}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px}
+.stat b{display:block;font-size:28px;color:var(--pr)}.stat span{color:var(--mu)}
+h2{margin:0 0 10px;font-size:18px}h3{margin:18px 0 8px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:480px}
+th,td{padding:9px;text-align:right;border-bottom:1px solid var(--bd)}th{color:var(--mu);font-weight:500;font-size:13px}
+.chip{display:inline-block;background:var(--soft);color:var(--pr);padding:1px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.chip.g{background:#f6ecc7;color:#7a5d00}
+.note{border-right:4px solid var(--ac);margin-bottom:10px}.note p{margin:6px 0;white-space:pre-wrap}
+.meta{color:var(--mu);font-size:13px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.login{max-width:380px;margin:8vh auto;text-align:center}.login .logo{font-size:54px}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);margin:3px 0 10px}
+label{font-size:14px;color:var(--mu)}
+dialog{border:0;border-radius:16px;padding:20px;width:min(460px,92vw);background:var(--card);color:var(--tx)}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.err{color:var(--dn);min-height:20px;font-size:14px}
+.empty{text-align:center;color:var(--mu);padding:20px}
+.hero{background:var(--soft);display:flex;gap:14px;align-items:center;margin-bottom:8px}.hero .logo{font-size:38px}
+.sh{background:var(--soft);display:flex;justify-content:space-between;align-items:center;margin:18px 0 8px;padding:10px 16px}
+.sh h2{margin:0}
+.tabs{display:flex;gap:8px;overflow-x:auto;margin:0 0 14px}
+.tabs button{border:1px solid var(--bd);background:var(--card);padding:8px 18px;border-radius:999px;cursor:pointer;white-space:nowrap;font-weight:500}
+.tabs button.on{background:var(--pr);color:#fff;border-color:var(--pr)}
+.p{display:none}
+body[data-mt=in] .p-in{display:grid}
+body[data-mt=st] .p-st,body[data-mt=sh] .p-sh,body[data-mt=nt] .p-nt{display:block}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<dialog id="dlg"><form method="dialog" id="frm"></form></dialog>
+<script>
+var cfg={apiKey:"AIzaSyBaZrQkxfMHpsmSaBy3jf7eJ5LMP-9pePI",authDomain:"quran-project-28785.firebaseapp.com",projectId:"quran-project-28785",storageBucket:"quran-project-28785.firebasestorage.app",messagingSenderId:"211967549230",appId:"1:211967549230:web:78a1bd71a148a30145a4bf"};
+var ok=false,wU=null,wc='',sl=[],so=[],hasMore=false,unsub=[],mt='in',fc={},me=null,vs='',selS='',selH='admin',db={sheikhs:[],students:[],notes:[]},rd={},loadErr='',pend=false,restored=false,fs=null;
+try{firebase.initializeApp(cfg);fs=firebase.firestore();fs.settings({experimentalAutoDetectLongPolling:true})}catch(e){loadErr='تعذر الاتصال بـ Firebase: '+e.message}
+function netTxt(){if(!ready())return'';var off=fc.students||fc.sheikhs||fc.notes;return off?'🔴 غير متصل بالخادم — البيانات لن تُحفظ':'🟢 متصل ومحفوظ على الخادم'}
+function ready(){return ok}
+function werr(e){alert('تعذر الحفظ — تأكد من الاتصال بالإنترنت ومن قواعد Firebase\n'+e.message)}
+function put(c,id,d){return fs.collection(c).doc(id).set(d,{merge:true}).catch(werr)}
+function del(c,id){return fs.collection(c).doc(id).delete().catch(werr)}
+function addNote(n){n.id=uid();n.ts=Date.now();n.key=n.code+'_'+n.ts;return put('notes',n.id,n)}
+function busy(){var a=document.activeElement;return a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)&&a.closest('#app')}
+function rr(){if(busy()){pend=true;return}render()}
+document.addEventListener('focusout',function(){if(pend)setTimeout(function(){if(!busy()){pend=false;render()}},60)});
+function restore(done){var r=null;try{r=JSON.parse(localStorage.getItem('qs_me'))}catch(e){}
+ if(!r)return done();
+ if(r.role==='admin'){me=r;return done()}
+ if(r.role==='sheikh'){if(db.sheikhs.some(function(x){return x.id===r.id}))me=r;return done()}
+ fs.collection('students').doc(r.id).get().then(function(d){if(d.exists)me=r;done()}).catch(function(){done()})}
+function mp(d){var o=d.data();o.id=d.id;return o}
+function unw(){if(wU){wU();wU=null}sl=[];so=[];hasMore=false}
+function stop(){unsub.forEach(function(f){f()});unsub=[];unw()}
+function lerr(e){alert('تعذر قراءة البيانات: '+e.message)}
+function listen(q,name,fn){unsub.push(q.onSnapshot(function(snap){fc[name]=snap.metadata.fromCache;fn(snap);rr()},lerr))}
+function nq(code,n,after){var q=fs.collection('notes').orderBy('key','desc');q=after?q.startAfter(after):q.startAt(code+'_\uf8ff');return q.endAt(code+'_').limit(n)}
+function watchStudent(code){unw();wc=code;wU=nq(code,30).onSnapshot(function(snap){fc.notes=snap.metadata.fromCache;sl=snap.docs.map(mp);if(!so.length)hasMore=sl.length>=30;rr()},lerr)}
+function snAll(){var ids={};sl.forEach(function(n){ids[n.id]=1});return sl.concat(so.filter(function(n){return!ids[n.id]}))}
+function more(){var a=snAll();if(!a.length)return;nq(wc,30,a[a.length-1].key).get().then(function(s){var l=s.docs.map(mp);so=so.concat(l);hasMore=l.length>=30;render()}).catch(werr)}
+function start(){stop();if(!me)return;
+ if(me.role==='student'){watchStudent(me.id);return}
+ listen(fs.collection('students'),'students',function(s){db.students=s.docs.map(mp)});
+ if(me.role==='admin')listen(fs.collection('sheikhs'),'sheikhs',function(s){db.sheikhs=s.docs.map(mp)});
+ listen(fs.collection('notes').orderBy('ts','desc').limit(30),'notes',function(s){db.notes=s.docs.map(mp)})}
+if(fs)fs.collection('sheikhs').get().then(function(s){db.sheikhs=s.docs.map(mp);fc.sheikhs=s.metadata.fromCache;ok=true;restore(function(){if(me)start();render()})}).catch(function(e){loadErr='تعذر قراءة البيانات: '+e.message;render()});
+var $=function(s){return document.querySelector(s)};
+function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function today(){return new Date().toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}
+function sName(id,fb){if(id==='admin')return 'الشيخ المدير';var s=db.sheikhs.find(function(x){return x.id===id});return s?s.name:(fb||'شيخ محذوف')}
+function stu(c){return db.students.find(function(x){return x.code===c})}
+function nextCode(){var n=1001+db.students.length;while(stu('ST'+n))n++;return'ST'+n}
+function sheikhOpts(){return[['admin','الشيخ المدير']].concat(db.sheikhs.map(function(s){return[s.id,s.name]}))}
+var TYPES=['حفظ جديد','مراجعة','تجويد','تلاوة','سلوك وانضباط','ملاحظة عامة'];
+function userTaken(u,except){return u==='shikh'||db.students.some(function(x){return x.code===u})||db.sheikhs.some(function(x){return x!==except&&x.user===u})}
+
+function nz(s){return String(s||'').replace(/[\u0660-\u0669]/g,function(d){return d.charCodeAt(0)-1632}).replace(/[\u06F0-\u06F9]/g,function(d){return d.charCodeAt(0)-1776}).trim()}
+function login(u,p,cb){u=nz(u);p=nz(p);var ul=u.toLowerCase();
+ if(ul==='shikh'&&p==='123456')return cb({role:'admin',id:'admin',name:'الشيخ المدير'});
+ var s=db.sheikhs.find(function(x){return x.user.toLowerCase()===ul&&x.pass===p});if(s)return cb({role:'sheikh',id:s.id,name:s.name});
+ if(!u||p.toLowerCase()!==ul||/\//.test(u)||u==='.'||u==='..')return cb(null);
+ fs.collection('students').doc(u).get().then(function(d){return d.exists?d:fs.collection('students').doc(u.toUpperCase()).get()}).then(function(d){cb(d&&d.exists?{role:'student',id:d.id,name:d.data().name}:null)}).catch(function(){cb(null)})}
+
+function canEdit(n){return me.role==='admin'||(n.authorId===me.id&&n.authorType===(me.role==='student'?'student':'sheikh'))}
+function noteCard(n,showStu,showAuth){
+ return '<div class="card note"><div class="meta"><span class="chip">'+esc(n.type)+'</span>'+(showStu?'<b>'+esc((stu(n.code)||{}).name||n.code)+'</b>':'')+(showAuth?'<span class="chip g">'+(n.authorType==='student'?'الدارس':'الشيخ')+': '+esc(n.authorType==='student'?n.author:sName(n.authorId,n.author))+'</span>':'')+'<span>'+esc(n.date)+'</span></div><p>'+esc(n.text)+'</p>'+(canEdit(n)?'<div class="acts"><button class="btn sm ou" data-a="en" data-i="'+n.id+'">تعديل</button><button class="btn sm dn" data-a="dn" data-i="'+n.id+'">حذف</button></div>':'')+'</div>'}
+
+function render(){
+ document.body.setAttribute('data-mt',mt);
+ if(!ready()){$('#app').innerHTML='<div class="wrap"><div class="card login"><div class="logo">📖</div><h2>'+(loadErr?'حدثت مشكلة':'جاري التحميل…')+'</h2><p class="err">'+esc(loadErr)+'</p></div></div>';return}
+ if(!me){$('#app').innerHTML='<div class="wrap"><div class="card login"><div class="logo">📖</div><h2>مدرسة القرآن الكريم</h2><form id="lf" style="text-align:right"><label>اسم المستخدم / كود الدارس</label><input id="u" autocomplete="username" required><label>كلمة المرور</label><input id="p" type="password" autocomplete="current-password" required><div class="err" id="er"></div><button class="btn" style="width:100%">دخول</button></form><div class="meta" style="justify-content:center;margin-top:10px">'+netTxt()+'</div></div></div>';
+  $('#lf').onsubmit=function(e){e.preventDefault();$('#er').textContent='';login($('#u').value,$('#p').value,function(r){if(!r){$('#er').textContent='بيانات الدخول غير صحيحة';return}me=r;vs='';try{localStorage.setItem('qs_me',JSON.stringify(me))}catch(x){}start();render()})};return}
+ var role={admin:'مدير',sheikh:'شيخ',student:'دارس'}[me.role];
+ var body=me.role==='student'?studentPage(me.id):vs?'<button class="btn ou" data-a="bk">→ رجوع للشاشة الرئيسية</button><div style="height:12px"></div>'+studentPage(vs):mainPage();
+ $('#app').innerHTML='<header><div class="in"><span class="logo">📖</span><div class="ttl">مدرسة القرآن الكريم<small>مرحباً '+esc(me.name)+' · '+role+' · '+netTxt()+'</small></div><button class="btn gh" id="lo">تسجيل خروج</button></div></header><div class="wrap">'+body+'</div>';
+ $('#lo').onclick=function(){stop();me=null;vs='';try{localStorage.removeItem('qs_me')}catch(x){}render()};
+}
+
+function mainPage(){
+ var A=me.role==='admin',myN=db.notes;
+ var h='<div class="grid"><div class="card stat"><b>'+db.students.length+'</b><span>الدارسون</span></div>'+(A?'<div class="card stat"><b>'+(db.sheikhs.length+1)+'</b><span>المشايخ</span></div>':'')+'<div class="card stat"><b>'+myN.length+'</b><span>آخر الملاحظات</span></div></div>'+'<nav class="tabs">'+[['in','➕ إدخال'],['st','👥 الدارسون'],A?['sh','🕌 المشايخ']:null,['nt','📝 الملاحظات']].filter(Boolean).map(function(t){return'<button data-a="tab" data-i="'+t[0]+'" class="'+(mt===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('')+'</nav><div class="g2 p p-in">';
+ // note entry
+ h+='<div class="card"><h2>📝 تسجيل ملاحظة</h2>'+(db.students.length?'<form id="nf"><label>الدارس</label><select name="stu"><option value="">— اختر الدارس —</option>'+db.students.map(function(s){return'<option value="'+esc(s.code)+'"'+(selS===s.code?' selected':'')+'>'+esc(s.name)+' ('+esc(s.code)+')</option>'}).join('')+'</select><label>الشيخ</label>'+(A?'<select name="h">'+sheikhOpts().map(function(o){return'<option value="'+esc(o[0])+'"'+(selH===o[0]?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select>':'<input value="'+esc(me.name)+'" disabled>')+'<label>النوع</label><select name="type">'+TYPES.map(function(t){return'<option>'+t+'</option>'}).join('')+'</select><label>الملاحظة</label><textarea name="text" rows="4" required></textarea><div class="err"></div><button class="btn" style="width:100%">حفظ الملاحظة</button></form>':'<div class="empty">أضف دارساً أولاً</div>')+'</div>';
+ if(A){
+  h+='<div class="card"><h2>👤 إدخال دارس جديد</h2><form id="sf"><label>اسم الدارس</label><input name="name" required><label>الكود (اسم الدخول والباسورد)</label><input name="code" value="'+nextCode()+'" required><label>الهاتف (اختياري)</label><input name="phone"><div class="err"></div><button class="btn" style="width:100%">إضافة الدارس</button></form></div>';
+  h+='<div class="card"><h2>🕌 إدخال شيخ جديد</h2><form id="hf"><label>اسم الشيخ</label><input name="name" required><label>اسم المستخدم</label><input name="user" required><label>كلمة المرور</label><input name="pass" required><div class="err"></div><button class="btn" style="width:100%">إضافة الشيخ</button></form></div>'}
+ h+='</div><div class="p p-st"><h3>👥 الدارسون ('+db.students.length+')</h3><div class="card tw"><table><tr><th>الكود</th><th>الاسم</th><th>الهاتف</th><th></th></tr>'+(db.students.length?db.students.map(function(s){return'<tr><td><span class="chip">'+esc(s.code)+'</span></td><td>'+esc(s.name)+'</td><td>'+esc(s.phone||'—')+'</td><td><div class="acts"><button class="btn sm" data-a="vw" data-i="'+esc(s.code)+'">صفحة الدارس</button>'+(A?'<button class="btn sm ou" data-a="es" data-i="'+esc(s.code)+'">تعديل</button><button class="btn sm dn" data-a="ds" data-i="'+esc(s.code)+'">حذف</button>':'')+'</div></td></tr>'}).join(''):'<tr><td colspan="5" class="empty">لا يوجد دارسون</td></tr>')+'</table></div>';
+ h+='</div>';if(A)h+='<div class="p p-sh"><h3>🕌 المشايخ ('+(db.sheikhs.length+1)+')</h3><div class="card tw"><table><tr><th>الاسم</th><th>اسم المستخدم</th><th></th></tr><tr><td>الشيخ المدير</td><td>shikh</td><td><span class="chip">المدير</span></td></tr>'+db.sheikhs.map(function(s){return'<tr><td>'+esc(s.name)+'</td><td>'+esc(s.user)+'</td><td><div class="acts"><button class="btn sm ou" data-a="eh" data-i="'+s.id+'">تعديل</button><button class="btn sm dn" data-a="dh" data-i="'+s.id+'">حذف</button></div></td></tr>'}).join('')+'</table></div>';
+ if(A)h+='</div>';var rec=myN.slice();
+ return h+'<div class="p p-nt"><h3>📝 آخر الملاحظات ('+myN.length+')</h3><p class="meta">لعرض كل ملاحظات دارس افتح صفحته من تبويب الدارسون</p>'+(rec.length?rec.map(function(n){return noteCard(n,true,true)}).join(''):'<div class="card empty">لا توجد ملاحظات بعد</div>')+'</div>'}
+
+function studentPage(code){
+ var d=stu(code)||(me.role==='student'&&me.id===code?{code:me.id,name:me.name}:null);if(!d)return'<div class="card empty">الدارس غير موجود</div>';
+ var ns=snAll(),g={},ids=[];
+ ns.forEach(function(n){if(n.authorType==='sheikh'){if(!g[n.authorId]){g[n.authorId]=[];ids.push(n.authorId)}g[n.authorId].push(n)}});
+ var own=ns.filter(function(n){return n.authorType==='student'});
+ var h='<div class="card hero"><span class="logo">🎓</span><div><h2 style="margin:0">'+esc(d.name)+'</h2><div class="meta">الكود: '+esc(d.code)+' · المشايخ: '+(ids.length?ids.map(function(i){return esc(sName(i,g[i][0].author))}).join(' ، '):'—')+'</div></div></div>';
+ if(!ids.length)h+='<div class="card empty">لا توجد ملاحظات من المشايخ بعد</div>';
+ ids.forEach(function(id){h+='<div class="card sh"><h2>🕌 '+esc(sName(id,g[id][0].author))+'</h2><span class="chip">'+g[id].length+' ملاحظة</span></div>'+g[id].map(function(n){return noteCard(n,false,false)}).join('')});
+ h+='<div class="card sh"><h2>✍️ ملاحظات الدارس نفسه</h2>'+(me.role==='student'?'<button class="btn sm" data-a="an">+ تسجيل ملاحظة</button>':'<span class="chip">'+own.length+'</span>')+'</div>';
+ return h+(own.length?own.map(function(n){return noteCard(n,false,false)}).join(''):'<div class="card empty">لا توجد ملاحظات</div>')+(hasMore?'<div style="text-align:center;margin:14px"><button class="btn ou" data-a="more">عرض الأقدم</button></div>':'')}
+
+function modal(title,fields,cb){
+ var f=$('#frm');
+ f.innerHTML='<h2>'+title+'</h2>'+fields.map(function(x){var v=x.v==null?'':x.v,h;
+  if(x.t==='select')h='<select name="'+x.k+'">'+x.o.map(function(o){return'<option'+(o===v?' selected':'')+'>'+esc(o)+'</option>'}).join('')+'</select>';
+  else if(x.t==='area')h='<textarea name="'+x.k+'" rows="4" required>'+esc(v)+'</textarea>';
+  else h='<input name="'+x.k+'" value="'+esc(v)+'" '+(x.opt?'':'required')+'>';
+  return'<label>'+x.l+'</label>'+h}).join('')+'<div class="err" id="me"></div><div style="display:flex;gap:8px"><button class="btn">حفظ</button><button class="btn ou" type="button" id="cx">إلغاء</button></div>';
+ $('#cx').onclick=function(){$('#dlg').close()};
+ f.onsubmit=function(e){e.preventDefault();var o={};new FormData(f).forEach(function(v,k){o[k]=String(v).trim()});var er=cb(o);if(er){$('#me').textContent=er;return}$('#dlg').close();render()};
+ $('#dlg').showModal()}
+
+document.addEventListener('submit',function(e){
+ var f=e.target,id=f.id;if(id==='frm'||id==='lf')return;e.preventDefault();
+ var o={},er=f.querySelector('.err');new FormData(f).forEach(function(v,k){o[k]=String(v).trim()});
+ function fail(m){er.textContent=m}
+ if(id==='nf'){if(!o.stu)return fail('اختر الدارس');var hid=me.role==='admin'?o.h:me.id;selS=o.stu;selH=hid;
+  addNote({code:o.stu,type:o.type,text:o.text,author:sName(hid),authorId:hid,authorType:'sheikh',date:today()})}
+ else if(id==='sf'){o.code=nz(o.code);if(!/^[A-Za-z0-9_\u0600-\u06FF-]+$/.test(o.code))return fail('الكود: حروف وأرقام فقط بدون مسافات');if(stu(o.code)||userTaken(o.code))return fail('هذا الكود مستخدم من قبل');put('students',o.code,{code:o.code,name:o.name,phone:o.phone,ts:Date.now()})}
+ else if(id==='hf'){if(userTaken(o.user))return fail('اسم المستخدم مستخدم من قبل');var hid2=uid();put('sheikhs',hid2,{id:hid2,name:o.name,user:o.user,pass:o.pass,ts:Date.now()})}
+ if(document.activeElement)document.activeElement.blur();render()});
+document.addEventListener('change',function(e){var n=e.target.name;if(n==='stu')selS=e.target.value;if(n==='h')selH=e.target.value});
+
+document.addEventListener('click',function(e){
+ var b=e.target.closest('[data-a]');if(!b)return;var a=b.dataset.a,i=b.dataset.i;
+ var N=function(){return db.notes.concat(snAll()).find(function(n){return n.id===i})};
+ if(a==='tab'){mt=i;render()}
+ else if(a==='more')more();
+ else if(a==='vw'){vs=i;watchStudent(i);render();window.scrollTo(0,0)}
+ else if(a==='bk'){vs='';unw();render()}
+ else if(a==='an')modal('ملاحظة جديدة',[{k:'type',l:'النوع',t:'select',o:TYPES,v:TYPES[0]},{k:'text',l:'الملاحظة',t:'area'}],function(o){addNote({code:me.id,type:o.type,text:o.text,author:me.name,authorId:me.id,authorType:'student',date:today()})});
+ else if(a==='en'){var n=N();modal('تعديل الملاحظة',[{k:'type',l:'النوع',t:'select',o:TYPES,v:n.type},{k:'text',l:'الملاحظة',t:'area',v:n.text}],function(o){put('notes',n.id,{type:o.type,text:o.text})})}
+ else if(a==='dn'){if(confirm('حذف هذه الملاحظة؟')){del('notes',i)}}
+ else if(a==='es'){var s=stu(i);modal('تعديل دارس',[{k:'name',l:'الاسم',v:s.name},{k:'phone',l:'الهاتف',v:s.phone,opt:1}],function(o){put('students',s.code,{name:o.name,phone:o.phone})})}
+ else if(a==='ds'){if(confirm('حذف الدارس وكل ملاحظاته؟')){fs.collection('notes').where('code','==',i).get().then(function(q){var bt=fs.batch();bt.delete(fs.collection('students').doc(i));q.docs.forEach(function(d){bt.delete(d.ref)});return bt.commit()}).catch(werr)}}
+ else if(a==='eh'){var h=db.sheikhs.find(function(x){return x.id===i});modal('تعديل شيخ',[{k:'name',l:'الاسم',v:h.name},{k:'user',l:'اسم المستخدم',v:h.user},{k:'pass',l:'كلمة المرور',v:h.pass}],function(o){if(userTaken(o.user,h))return'اسم المستخدم مستخدم';put('sheikhs',h.id,{name:o.name,user:o.user,pass:o.pass})})}
+ else if(a==='dh'){if(confirm('حذف الشيخ؟ ستبقى ملاحظاته ظاهرة في صفحات الدارسين.')){if(selH===i)selH='admin';del('sheikhs',i)}}
+});
+render();
+</script>
+</body>
+</html>
